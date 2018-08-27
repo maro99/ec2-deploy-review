@@ -1,46 +1,20 @@
-
-FROM            ubuntu:17.10
-MAINTAINER      nadcdc@gmail.com
-
-# update upgrade
-RUN             apt -y update && apt -y dist-upgrade
-
-# zsh
-RUN             apt -y  install zsh curl git
-RUN             curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash
-RUN             chsh -s /usr/bin/zsh
-
-# pypenv
-RUN             curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-RUN              apt -y  install make build-essential libssl-dev zlib1g-dev libbz2-dev \
-                 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-                 xz-utils tk-dev libffi-dev
-
-# pypenv settings
-RUN             echo 'export PATH="/root/.pyenv/bin:$PATH"' >> ~/.zshrc
-RUN             echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-RUN             echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.zshrc
-
-# install python
-ENV             PATH /root/.pyenv/bin:$PATH
-RUN             pyenv install 3.6.5
-
-# install pipenv
-RUN             apt -y install software-properties-common python-software-properties
-RUN             add-apt-repository -y ppa:pypa/ppa
-RUN             apt -y update
-RUN             apt -y install pipenv
-
-# Language
-ENV             LANG    C.UTF-8
-ENV             LC_ALL  C.UTF-8
+FROM                ec2-deploy:base
 
 # Copy project files
-COPY            .  /srv/project
-WORKDIR          /srv/project
-RUN              pipenv install
+COPY                . /srv/project
+WORKDIR             /srv/project
 
-RUN             apt -y install vim
+# Virtualemv path
+RUN                 export VENV_PATH=$(pipenv --venv); echo $VENV_PATH
+ENV                 VENV_PATH $VENV_PATH
+# 아래 home부분에서 virtualenv경로를 지정하기 위해서
+# VENV_PATH에 pipenv --venv 실행결과 할당한후
+# 다시 도커파일에서 쓰기 위해서 궂이 ENV로 설정하려고 불러왔다.
 
+CMD                 pipenv run uwsgi \
+                        --http :8000 \
+                        --chdir /srv/project/app \
+#                        --home $($VENV_PATH) \ #home에서는$VENV_PATH로가져옴
+                        --module config.wsgi
 
-CMD             pipenv run uwsgi --http :8000 --chdir /srv/project/app --module config.wsgi
+# 이렇게 하면 도커파일에서 VENV_PATH로 지정한 것들 동적으로 home에다 넣을 수 있다.
