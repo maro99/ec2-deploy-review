@@ -35,8 +35,3 @@ RUN             cp -f ${PROJECT_DIR}/.config/supervisor_app.conf \
 # RUN supervisor
 CMD             supervisord -n
 
-## Run uWSGI (CMD)
-#CMD             pipenv run uwsgi --ini ${PROJECT_DIR}/.config/uwsgi_http.ini
-
-# RUN Ngnix
-#CMD             nginx -g 'daemon off;'
