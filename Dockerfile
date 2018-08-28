@@ -3,8 +3,8 @@ FROM            ec2-deploy:base
 ENV             PROJECT_DIR     /srv/project
 
 
-#Ngnix
-RUN             apt -y install nginx
+#Nginx, superviosr install
+RUN             apt -y install nginx supervisor
 
 # Copy projects files
 COPY            .   ${PROJECT_DIR}
@@ -28,6 +28,12 @@ RUN             cp -f ${PROJECT_DIR}/.config/nginx.conf \
                 ln -sf  /etc/nginx/sites-available/nginx_app.conf \
                         /etc/nginx/sites-enabled
 
+# Supervisor
+RUN             cp -f ${PROJECT_DIR}/.config/supervisor_app.conf \
+                        /etc/supervisor/conf.d
+
+# RUN supervisor
+CMD             supervisord -n
 
 ## Run uWSGI (CMD)
 #CMD             pipenv run uwsgi --ini ${PROJECT_DIR}/.config/uwsgi_http.ini
