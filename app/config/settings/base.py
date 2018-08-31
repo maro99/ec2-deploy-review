@@ -13,13 +13,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEMPLATES_DIR = os.path.join(BASE_DIR,'templates')
 STATICFILES_DIR = os.path.join(BASE_DIR,'static')
 
 ROOT_DIR = os.path.dirname(BASE_DIR)
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
-MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,13 +29,6 @@ SECRET_KEY = '!r$qpahwt4eod3m4&-02u0j2kox-py(+y$t_1)=t9q!0njs=k4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.1.1',
-    '.amazonaws.com',
-    '.amazonaws'
-]
 
 
 # Application definition
@@ -80,19 +72,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -117,9 +96,9 @@ AUTH_USER_MODEL = 'members.User'
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -131,7 +110,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
 STATICFILES_DIRS=[STATICFILES_DIR,]
-
-MEDIA_URL = '/media/'

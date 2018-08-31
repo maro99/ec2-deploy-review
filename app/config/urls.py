@@ -24,9 +24,11 @@ from config import views
 
 urlpatterns = [
 
-    url('admin/', admin.site.urls),
-    url('index/',views.index, name='index'),
+    path('admin/', admin.site.urls),
+    path('',views.index, name='index'),
 ] + static(
     prefix=settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT,
 )
+
+
