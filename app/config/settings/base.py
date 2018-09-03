@@ -22,9 +22,9 @@ STATICFILES_DIR = os.path.join(BASE_DIR,'static')
 ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_DIR = os.path.join(ROOT_DIR,'.secret')
 
-print(SECRET_DIR)
 
 secrets = json.loads(open(os.path.join(SECRET_DIR,'base.json')).read())
+print(secrets)
 SECRET_KEY = secrets['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
