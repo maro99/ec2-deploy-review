@@ -12,7 +12,7 @@ MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 
 # wsgi
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.dev.application'
 
 # DB
 DATABASES = secrets['DATABASES']
