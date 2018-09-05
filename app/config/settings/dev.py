@@ -23,10 +23,10 @@ AWS_S3_REGION_NAME = data["AWS_S3_REGION_NAME"]
 AWS_S3_SIGNATURE_VERSION = data["AWS_S3_SIGNATURE_VERSION"]
 
 # Static, Media
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 
 # wsgi
