@@ -4,6 +4,7 @@
 .media
 .secret
 
+
 ### Django ###
 *.log
 *.pot
