@@ -2,7 +2,7 @@
 
 IDENTITY_FILE="~/.ssh/fc-8th.pem"
 USER="ubuntu"
-HOST="ec2-13-125-224-95.ap-northeast-2.compute.amazonaws.com"
+HOST="ec2-13-209-76-106.ap-northeast-2.compute.amazonaws.com"
 PROJECT_DIR="$HOME/Desktop/projects/deploy_home_practice/ec2-deploy"
 SERVER_DIR='/home/ubuntu/project'
 

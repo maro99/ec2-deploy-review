@@ -10,11 +10,6 @@ SERVER_DIR='/home/ubuntu/project'
 # ssh로 서버에 접속하는 명령어
 CMD_CONNECT="ssh -i ${IDENTITY_FILE} ${USER}@${HOST}"
 
-#서버에서 실행중이던 uwsgi 프로세스들을 모두 종료
-${CMD_CONNECT} "pkill -9 -ef uwsgi"
-echo "kill uwsgi process"
-
-
 # 서버의 파일을 지움.
 ${CMD_CONNECT} rm -rf ${SERVER_DIR}
 echo "-Delete server files"
@@ -32,15 +27,28 @@ VENV_PATH=$(${CMD_CONNECT} "cd ${SERVER_DIR} && pipenv --venv")
 PYTHON_PATH="${VENV_PATH}/bin/python"
 echo "=GET Python path ($PYTHON_PATH)"
 
+# Dockerbuild 및  Docker run 함
+DOCKER_BUILD_BASE_CMD="sudo docker build -t ec2-deploy:base -f Dockerfile.base ."
+DOCKER_BUILD_DEV_CMD="sudo docker build -t ec2-deploy:dev -f Dockerfile.dev ."
+DOCKER_RUN_DEV_CMD="sudo docker run --name ec2-deploy --rm -id -p 8080:80 ec2-deploy:dev"
 
-# runserver를 background에서 실행해주는 커맨드 (nohup)
-RUNSERVER_CMD="nohup ${VENV_PATH}/bin/uwsgi --ini .config/uwsgi_http2.ini &>/dev/null &"
+${CMD_CONNECT} "cd ${SERVER_DIR} && ${DOCKER_BUILD_BASE_CMD}"
+${CMD_CONNECT} "cd ${SERVER_DIR} && ${DOCKER_BUILD_DEV_CMD}"
 
-#서버 좁속 후, 프로젝트의 폴더까지 이동한후 runserver 명령어를 실행
-${CMD_CONNECT} "cd ${SERVER_DIR} && ${RUNSERVER_CMD}"
-echo  "Execute runserver"
+# 기존의 실행중인 docker종료 시킴.
+DOCKER_KILL_CMD="sudo docker kill ec2-deploy"
+${CMD_CONNECT} "cd ${SERVER_DIR} && ${DOCKER_KILL_CMD}"
 
-echo "Deploy complete"
+# DOcker run
+${CMD_CONNECT} "cd ${SERVER_DIR} && ${DOCKER_RUN_DEV_CMD}"
 
+#기존의 돌고있는 nginx 종료 시킴.
+KILL_NGINX="sudo fuser -k 80/tcp"
+KILL_NGINX2="sudo pkill -ef -9 nginx"
+${CMD_CONNECT} "cd ${SERVER_DIR} && ${KILL_NGINX} && ${KILL_NGINX2}"
 
+#ec2 안에서 nginx (리버스 프록시 역할하는) 실행시킨다.
+RUN_NGINX="sudo nginx"
+${CMD_CONNECT} "cd ${SERVER_DIR} && ${RUN_NGINX}"
+echo "nginx runnung"
 
